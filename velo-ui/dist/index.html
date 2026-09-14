@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07120d" />
+    <meta name="description" content="Find and reserve a Velo electric scooter near you in Coimbatore. Compare nearby rides, see the price up front, and hold one for ten minutes." />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Velo — Find a scooter" />
+    <meta property="og:description" content="Find and reserve a nearby electric scooter. Transparent pricing, simple parking, ten-minute hold." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Favicon (inline SVG — scooter icon) -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2307120d'/%3E%3Cpath d='M16 39h31M25 39l6-18h10l4 18M26 46a4 4 0 1 1 0-8 4 4 0 0 1 0 8m21 0a4 4 0 1 1 0-8 4 4 0 0 1 0 8' fill='none' stroke='%23c8ff4d' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+
+    <title>Velo — Find a scooter</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <main class="shell">
+
+      <!-- ── Topbar ─────────────────────────────────────────── -->
+      <header class="topbar">
+        <a class="brand" href="#discovery" aria-label="Velo — go to scooter discovery">
+          <span class="brand-mark" aria-hidden="true">v</span>
+          <span>velo</span>
+        </a>
+        <div class="city" aria-label="Current city">
+          <span class="pulse" aria-hidden="true"></span>
+          Coimbatore, Tamil Nadu
+        </div>
+        <button class="profile" type="button" aria-label="Open profile menu">GK</button>
+      </header>
+
+      <!-- ── Intro / Hero ───────────────────────────────────── -->
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Ride local, on your time</p>
+          <h1 id="page-title">Find your next Velo.</h1>
+          <p class="lede">
+            Compare nearby scooters, see the price up front, and hold one for ten minutes.
+          </p>
+        </div>
+        <!-- Shown only when a scooter is actively held -->
+        <div class="reservation-status" id="reservationStatus" hidden aria-live="polite" aria-atomic="true"></div>
+      </section>
+
+      <!-- ── Filter Controls ────────────────────────────────── -->
+      <section class="controls" aria-label="Filter and sort scooters">
+        <label class="search">
+          <span aria-hidden="true">⌕</span>
+          <span class="sr-only">Search scooters</span>
+          <input
+            id="search"
+            type="search"
+            placeholder="Search by scooter or neighbourhood"
+            autocomplete="off"
+            aria-label="Search scooters by name or area"
+          />
+        </label>
+
+        <label>
+          <span class="sr-only">Availability filter</span>
+          <select id="availability" aria-label="Filter by availability">
+            <option value="all">All scooters</option>
+            <option value="available">Available now</option>
+            <option value="low">Low battery</option>
+          </select>
+        </label>
+
+        <label>
+          <span class="sr-only">Minimum battery filter</span>
+          <select id="battery" aria-label="Filter by minimum battery level">
+            <option value="0">Any charge</option>
+            <option value="60">60%+ charge</option>
+            <option value="80">80%+ charge</option>
+          </select>
+        </label>
+
+        <label>
+          <span class="sr-only">Sort order</span>
+          <select id="sort" aria-label="Sort scooters">
+            <option value="distance">Nearest first</option>
+            <option value="price">Lowest price</option>
+            <option value="battery">Most charged</option>
+          </select>
+        </label>
+      </section>
+
+      <!-- ── Map + Detail Workspace ─────────────────────────── -->
+      <section class="workspace" id="discovery" aria-label="Scooter discovery">
+
+        <!-- Map panel -->
+        <div class="map-panel">
+          <div class="map-toolbar">
+            <span id="resultCount" aria-live="polite" aria-atomic="true"></span>
+            <button id="locate" type="button" aria-label="Locate me and refresh nearby scooters">
+              ⌖ Locate me
+            </button>
+          </div>
+          <div
+            class="map-grid"
+            aria-label="Illustrative map of nearby Velo scooters"
+            id="map"
+            role="region"
+          ></div>
+          <div class="map-key" aria-label="Map legend">
+            <span><i class="available-dot" aria-hidden="true"></i>Available</span>
+            <span><i class="held-dot" aria-hidden="true"></i>Held</span>
+            <span><i class="service-dot" aria-hidden="true"></i>Unavailable</span>
+          </div>
+        </div>
+
+        <!-- Detail panel -->
+        <aside class="details" aria-label="Selected scooter details" aria-live="polite">
+          <div class="detail-empty" id="detailEmpty">
+            <span aria-hidden="true">🛴</span>
+            <h2>Choose a scooter</h2>
+            <p>Select a marker or a card to see its range, price, and parking rules.</p>
+          </div>
+          <div id="detailContent" hidden></div>
+        </aside>
+
+      </section>
+
+      <!-- ── Nearby Cards ────────────────────────────────────── -->
+      <section class="nearby" aria-labelledby="nearby-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Nearby now</p>
+            <h2 id="nearby-title">Pick the ride that fits.</h2>
+          </div>
+          <p>Prices include battery and range estimates.</p>
+        </div>
+
+        <!-- Populated by app.js -->
+        <div class="scooter-list" id="scooterList" role="list" aria-label="Nearby scooters"></div>
+
+        <!-- Shown when no scooters match filters -->
+        <div class="empty-results" id="emptyResults" hidden aria-live="polite">
+          <span aria-hidden="true">⌕</span>
+          <h2>Nothing matches yet</h2>
+          <p>Try clearing a filter or searching another nearby area.</p>
+          <button id="clearFilters" type="button">Clear filters</button>
+        </div>
+      </section>
+
+      <!-- ── Footer ─────────────────────────────────────────── -->
+      <footer>
+        <span>© 2026 Velo</span>
+        <span>Local data only · refresh to reset</span>
+      </footer>
+
+    </main>
+
+    <!-- ── Reservation Dialog ─────────────────────────────────── -->
+    <dialog id="reserveDialog" aria-labelledby="reserveTitle" aria-modal="true">
+      <form method="dialog" class="dialog-card">
+        <button class="close" value="cancel" aria-label="Close reservation confirmation">×</button>
+        <p class="eyebrow">Reservation review</p>
+        <h2 id="reserveTitle">Hold this Velo?</h2>
+
+        <!-- Summary rows injected by app.js -->
+        <div id="reservationSummary"></div>
+
+        <div class="rule">
+          <span aria-hidden="true">⏱</span>
+          <p>
+            <strong>Your 10-minute hold begins now.</strong>
+            Walk to the scooter, then scan it to start your ride.
+          </p>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="secondary" value="cancel" type="button" id="cancelDialog">Not now</button>
+          <button class="primary" id="confirmReserve" value="default" type="button">
+            Confirm 10-minute hold
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- ── Toast ──────────────────────────────────────────────── -->
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

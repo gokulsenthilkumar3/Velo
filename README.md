@@ -1,6 +1,6 @@
 # ev-share
 
-**EV scooter sharing built for India’s Tier-2 cities.** ev-share connects riders to reliable, nearby electric scooters while giving local operators the tools to run fleets, collect payments, understand demand, and prevent avoidable maintenance downtime.
+**EV scooter sharing built for India's Tier-2 cities.** ev-share connects riders to reliable, nearby electric scooters while giving local operators the tools to run fleets, collect payments, understand demand, and prevent avoidable maintenance downtime.
 
 ## What it includes
 
@@ -21,18 +21,36 @@ Riders use scooters for short local trips. Field operators rebalance and repair 
 - [System design](docs/system-design.md)
 - [Technology stack](docs/technology-stack.md)
 
+## Velo — Rider UI prototype
+
+`velo-ui/dist/` contains a static HTML/CSS/JS prototype of the **Velo** rider-facing scooter discovery and reservation interface. It runs entirely in the browser with no build step.
+
+### Running locally
+
+```bash
+cd velo-ui/dist
+python -m http.server 8080
+# then open http://localhost:8080
+```
+
+### Features demonstrated
+
+- Search, filter (availability, battery), and sort scooters
+- Map view with positioned scooter markers (available / held / unavailable states)
+- Scooter detail panel — battery, pricing, parking rules
+- 10-minute reservation hold with live countdown
+- Reservation cancel (manual or auto-expiry)
+- Toast notifications
+- Fully responsive (desktop, tablet, mobile)
+- Keyboard-accessible (Escape to close dialog, Enter/Space on cards)
+
 ## Development shape
 
 The planned codebase is a TypeScript monorepo with an Expo/React Native Android app, a Next.js web application, NestJS backend modules, and shared contracts. Local development will require Node.js, Docker, PostgreSQL, Redis, and environment variables for mapping, payment, messaging, and AWS services. Provider selections remain configurable integration boundaries.
 
 ```text
-apps/        rider-mobile, operations-web
-services/    NestJS API modules and workers
-packages/    shared types, API client, UI and configuration
-infra/       AWS infrastructure and deployment definitions
+velo-ui/     static rider discovery and reservation prototype
 docs/        product and technical documentation
 ```
 
-This repository currently contains the product and technical specification; it does not yet contain an application implementation.
-
-# Velo
+> This repository currently contains the product and technical specification plus the Velo static UI prototype. It does not yet contain the full application implementation.
